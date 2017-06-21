@@ -10,7 +10,7 @@ var dane0 = [];
 var opoznienie = 200;
 window.onload = function() {
 	var chart;
-	$.getJSON("http://127.0.0.1/~piccoro/1.json", function(data) {  
+	$.getJSON("1.json", function(data) {  
         dane0 = data.slice();
 		$.each(data, function(key, value){
 			dataPoints.push({x: value[0], y: parseInt(value[1])});
@@ -28,7 +28,7 @@ window.onload = function() {
 		updateChart();
 	});
 	function updateChart() {
-	$.getJSON("http://127.0.0.1/~piccoro/1.json", function(data) {
+	$.getJSON("1.json", function(data) {
       dataPoints.splice(0,dataPoints.length);
       //dataPoints.length = 0;
         dane0 = data.slice();
@@ -43,17 +43,15 @@ window.onload = function() {
 	});
 	}
 $("#textsub").click( function(e){ 
-    //var td = dane0;
     var dane = "Naglowek\n";
-    //return false;
     $.each(dane0, function( index, value ) {
-    dane+= value[0] + "\t" + value[1] + "\n";// + v[1].toString() + "  ";
-    //dane+= value.x + "\t" + value.y + "\n";// + v[1].toString() + "  ";
-});
+        dane+= value[0] + "\t" + value[1] + "\n";
+        //dane+= value.x + "\t" + value.y + "\n";// + v[1].toString() + "  ";
+    });
     var file = new File([dane], "dane.txt", {type: "text/plain;charset=utf-8"});
     saveAs(file);
     return false;
-    var file = new File([dataPoints], (text_filename.value || text_filename.placeholder) + ".txt", {type: "text/plain;charset=utf-8"});
+
 }
 );
 
