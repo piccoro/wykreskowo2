@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title></title>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script async="" src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
+<script type="text/javascript">
+var dataPoints = [];
+var dane0 = [];
+window.onload = function() {
+	var chart;
+	$.getJSON("http://127.0.0.1/~piccoro/1.json", function(data) {  
+        dane0 = data.slice();
+		$.each(data, function(key, value){
+			dataPoints.push({x: value[0], y: parseInt(value[1])});
+		});
+		chart = new CanvasJS.Chart("chartContainer",{
+			title:{
+				text:"Live Chart with dataPoints from External JSON"
+			},
+			data: [{
+				type: "line",
+				dataPoints : dataPoints,
+			}]
+		});
+		chart.render();
+		updateChart();
+	});
+	function updateChart() {
+	$.getJSON("http://127.0.0.1/~piccoro/1.json", function(data) {
+      dataPoints.splice(0,dataPoints.length);
+      //dataPoints.length = 0;
+        dane0 = data.slice();
+		$.each(data, function(key, value) {
+			dataPoints.push({
+			x: parseInt(value[0]),
+			y: parseInt(value[1])
+			});
+		});
+		chart.render();
+		setTimeout(function(){updateChart()}, 300);
+	});
+	}
+$("#textsub").click( function(e){ 
+    $("#textsub").addClass( "test" );
+    //var td = dane0;
+    var dane = "Naglowek\n";
+    //return false;
+    $.each(dane0, function( index, value ) {
+    dane+= value[0] + "\t" + value[1] + "\n";// + v[1].toString() + "  ";
+    //dane+= value.x + "\t" + value.y + "\n";// + v[1].toString() + "  ";
+});
+    var file = new File([dane], "dane.txt", {type: "text/plain;charset=utf-8"});
+    saveAs(file);
+    return false;
+    var file = new File([dataPoints], (text_filename.value || text_filename.placeholder) + ".txt", {type: "text/plain;charset=utf-8"});
+}
+);
+
+}
+</script>
+</head>
+	<body>
+		<p style="text-align: center;">
+			Jakis tytul</p>
+		<p>
+			&nbsp;</p>
+		<p>
+			Strona testowa</p>
+
+		<div id="chartContainer" style="height: 300px; width: 100%;background-color: lightgray;"></div>
+
+        <h2>Zapis danych</h2>
+        <textarea xmlns="http://www.w3.org/1999/xhtml" class="input" id="text" placeholder="Once upon a time..."></textarea>
+        <form id="textoptions">
+            <label>Filename: <input class="filename" id="text-filename" placeholder="a plain document" type="text" />.txt</label>
+            <input id="textsub" value="Save" type="submit" />
+        </form>
+    
+
+
+	</body>
+</html>
