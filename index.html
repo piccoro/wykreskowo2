@@ -7,6 +7,7 @@
 <script type="text/javascript">
 var dataPoints = [];
 var dane0 = [];
+var opoznienie = 200;
 window.onload = function() {
 	var chart;
 	$.getJSON("http://127.0.0.1/~piccoro/1.json", function(data) {  
@@ -38,11 +39,10 @@ window.onload = function() {
 			});
 		});
 		chart.render();
-		setTimeout(function(){updateChart()}, 300);
+		setTimeout(function(){updateChart()}, opoznienie);
 	});
 	}
 $("#textsub").click( function(e){ 
-    $("#textsub").addClass( "test" );
     //var td = dane0;
     var dane = "Naglowek\n";
     //return false;
@@ -54,6 +54,14 @@ $("#textsub").click( function(e){
     saveAs(file);
     return false;
     var file = new File([dataPoints], (text_filename.value || text_filename.placeholder) + ".txt", {type: "text/plain;charset=utf-8"});
+}
+);
+
+$("#czassub").click( function(e){ 
+    var czasik = $("#czas").val();
+    // sprawdziac czy to int !!!
+    opoznienie = czasik;
+    return false;
 }
 );
 
@@ -71,12 +79,14 @@ $("#textsub").click( function(e){
 		<div id="chartContainer" style="height: 300px; width: 100%;background-color: lightgray;"></div>
 
         <h2>Zapis danych</h2>
-        <textarea xmlns="http://www.w3.org/1999/xhtml" class="input" id="text" placeholder="Once upon a time..."></textarea>
         <form id="textoptions">
-            <label>Filename: <input class="filename" id="text-filename" placeholder="a plain document" type="text" />.txt</label>
             <input id="textsub" value="Save" type="submit" />
         </form>
-    
+        <h2>Zmiana opoznienia odczytu danych</h2>
+        <form id="czasform">
+            <label>czas[ms]: <input id="czas" placeholder="200" type="text" />[ms]</label>
+            <input id="czassub" value="Save" type="submit" />
+        </form>
 
 
 	</body>
